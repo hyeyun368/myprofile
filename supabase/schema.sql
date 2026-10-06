@@ -5,11 +5,13 @@ create table if not exists public.inquiries (
   name text not null check (char_length(name) between 1 and 100),
   email text not null check (char_length(email) between 3 and 200),
   message text not null check (char_length(message) between 1 and 5000),
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  -- 작성자 수정·삭제용 비밀번호 해시(scrypt, "salt:hash" hex). 서버에서만 읽는다.
+  password_hash text
 );
 
 -- RLS: publishable 키(anon)로는 새 문의 추가만 허용하고 조회·수정·삭제는 막는다.
--- 관리자 조회는 서버에서 secret 키로만 한다(secret 키는 RLS를 우회).
+-- 관리자 조회·삭제와 작성자 수정·삭제는 서버에서 secret 키로만 한다(secret 키는 RLS를 우회).
 alter table public.inquiries enable row level security;
 
 drop policy if exists "anyone can submit inquiries" on public.inquiries;

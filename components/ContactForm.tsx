@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { submitInquiry, type ContactState } from "@/app/contact/actions";
 
@@ -20,6 +21,9 @@ export default function ContactForm() {
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">
           확인 후 빠르게 연락드리겠습니다.
         </p>
+        <Link href="/contact/my" className="mt-4 inline-block text-sm text-rose-500 hover:underline">
+          내 문의 수정·삭제하기
+        </Link>
       </div>
     );
   }
@@ -37,6 +41,21 @@ export default function ContactForm() {
       <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
         문의 내용
         <textarea required name="message" rows={6} maxLength={5000} className={inputClass} />
+      </label>
+      <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        비밀번호
+        <input
+          required
+          type="password"
+          name="password"
+          minLength={4}
+          maxLength={100}
+          autoComplete="new-password"
+          className={inputClass}
+        />
+        <span className="font-normal text-zinc-500">
+          나중에 문의를 수정하거나 삭제할 때 필요합니다. (4자 이상)
+        </span>
       </label>
       {state.status === "error" && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
